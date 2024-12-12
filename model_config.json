@@ -1,0 +1,21 @@
+{
+    "model_config_name": "gns_model",
+    "graph_network_kwargs": {
+        "latent_size": 128,
+        "mlp_hidden_size": 128,
+        "mlp_num_hidden_layers": 2,
+        "num_message_passing_steps": 10
+    },
+    "learning_rate": 0.0001,
+    "noise_std": 0.0003,
+    "seed": 0,
+    "num_steps": 200,
+    "eval_rollout_steps": 50,
+    "rollout_noise_std": 0.0,
+    "input_sequence_length": 6,
+    "num_particle_types": 9,
+    "particle_type_embedding_size": 16,
+    "num_train_steps": 20000000,
+    "eval_batch_size": 2,
+    "batch_size": 2
+}
