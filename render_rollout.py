@@ -7,7 +7,7 @@ import matplotlib.animation as animation
 from matplotlib import colors
 from mpl_toolkits.mplot3d import Axes3D
 
-def render_rollout(rollout_data, output_dir, sim_name, show_trajectories=False):
+def render_rollout(rollout_data, output_dir, sim_name, show_trajectories=False, figsize=(10, 8), dpi=None):
     """Renders a rollout trajectory as a series of images and optionally creates an animation (gif).
 
     Args:
@@ -18,6 +18,8 @@ def render_rollout(rollout_data, output_dir, sim_name, show_trajectories=False):
       output_dir: The directory to save the rendered images and animation.
       sim_name: The name of the simulation.
       show_trajectories: Whether to show the full trajectories as lines.
+      figsize: Tuple of (width, height) in inches for the figure.
+      dpi: Dots per inch for the figure.
     """
 
     initial_positions = rollout_data["initial_positions"]
@@ -97,7 +99,7 @@ def render_rollout(rollout_data, output_dir, sim_name, show_trajectories=False):
         ax.legend()
 
     # Create the figure and axes for the plot
-    fig = plt.figure(figsize=(10, 8))
+    fig = plt.figure(figsize=figsize, dpi=dpi)
     ax = fig.add_subplot(111, projection="3d")
 
     # Create the animation
@@ -105,7 +107,7 @@ def render_rollout(rollout_data, output_dir, sim_name, show_trajectories=False):
 
     # Save the animation as a GIF
     output_path = os.path.join(output_dir, f"{sim_name}_rollout.gif")
-    ani.save(output_path, writer="pillow", fps=10)
+    ani.save(output_path, writer="pillow", fps=10, dpi=dpi)
 
     # Save individual frames as images
     for frame in range(num_steps):
@@ -121,12 +123,14 @@ def main():
     parser.add_argument("--input_pickle", type=str, required=True, help="Input path for trajectory data.")
     parser.add_argument("--sim_name", type=str, required=True, help="Name of the simulation to render.")
     parser.add_argument("--show_trajectories", action="store_true", help="Show full trajectories as lines.")
+    parser.add_argument("--figsize", type=float, nargs=2, default=[10, 8], help="Figure size (width height) in inches.")
+    parser.add_argument("--dpi", type=int, default=None, help="Dots per inch for the figure.")
     args = parser.parse_args()
 
     with open(args.input_pickle, "rb") as f:
         rollout_data = pickle.load(f)
 
-    render_rollout(rollout_data, args.output_dir, args.sim_name, args.show_trajectories)
+    render_rollout(rollout_data, args.output_dir, args.sim_name, args.show_trajectories, figsize=tuple(args.figsize), dpi=args.dpi)
 
 if __name__ == "__main__":
     main()
